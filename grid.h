@@ -3,14 +3,17 @@
 
 #include <QWidget>
 #include "tile.h"
+#include <vector>
 
 class Grid : public QWidget
 {
 public:
-    Grid();
+    Grid(QWidget* parent = nullptr);
+    
+    void initGrid();
     
 private:
-    Tile* m_tiles[4][4];
+    std::vector<Tile> m_tiles;
 };
 
 #endif // GRID_H
