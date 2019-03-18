@@ -16,11 +16,12 @@ public:
     
 	void addTile(Pos pos, unsigned int pow);
 	void removeTile(Pos pos);
+	void moveTile(Pos initialPos, Pos targetPos);
 	
     void initGrid();
 	void clearGrid();
 	
-	void move(Direction dir);
+	bool move(Direction dir);
 	
 	void printGrid() const {
 		for (int i = 0; i < 4; i++) {

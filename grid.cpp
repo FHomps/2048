@@ -33,6 +33,14 @@ void Grid::removeTile(Pos pos) {
 	}
 }
 
+void Grid::moveTile(Pos initialPos, Pos targetPos) {
+	if (m_tiles[initialPos.i][initialPos.j] == nullptr || m_tiles[targetPos.i][targetPos.j] != nullptr)
+		return;
+	m_tiles[initialPos.i][initialPos.j]->setPosition(targetPos);
+	m_tiles[targetPos.i][targetPos.j] = m_tiles[initialPos.i][initialPos.j];
+	m_tiles[initialPos.i][initialPos.j] = nullptr;
+}
+
 void Grid::initGrid() {
     clearGrid();
     
@@ -48,7 +56,9 @@ void Grid::clearGrid() {
 	}
 }
 
-void Grid::move(Direction dir) {
+bool Grid::move(Direction dir) {
+	bool successfulMove = false;
+	
 	if (dir == LEFT) {
 		for (int j = 1; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
@@ -58,17 +68,25 @@ void Grid::move(Direction dir) {
 					while (j2 > 0 && m_tiles[i][j2] == nullptr) {
 						j2--;
 					}
-					removeTile(Pos(i, j));
+					
 					//j2 is either 0 or the first tile encountered
+					
 					if (m_tiles[i][j2] == nullptr) {
-						addTile(Pos(i, j2), pow);
+						moveTile(Pos(i, j), Pos(i, j2));
+						successfulMove = true;
 					}
 					else if (m_tiles[i][j2]->getPowerOf2() != pow || m_tiles[i][j2]->recentlyFused) {
-						addTile(Pos(i, j2+1), pow);
+						if (j2+1 != j) {
+							moveTile(Pos(i, j), Pos(i, j2+1));		
+							successfulMove = true;
+						}
 					}
 					else {
+						removeTile(Pos(i, j2));
+						moveTile(Pos(i, j), Pos(i, j2));
 						m_tiles[i][j2]->setPowerOf2(pow+1);
 						m_tiles[i][j2]->recentlyFused = true;
+						successfulMove = true;
 					}
 				}
 			}
@@ -82,17 +100,23 @@ void Grid::move(Direction dir) {
 					int j2 = j+1;
 					while (j2 < 3 && m_tiles[i][j2] == nullptr)
 						j2++;
-					removeTile(Pos(i, j));
 					
 					if (m_tiles[i][j2] == nullptr) {
-						addTile(Pos(i, j2), pow);
+						moveTile(Pos(i, j), Pos(i, j2));
+						successfulMove = true;
 					}
 					else if (m_tiles[i][j2]->getPowerOf2() != pow || m_tiles[i][j2]->recentlyFused) {
-						addTile(Pos(i, j2-1), pow);
+						if (j2-1 != j) {
+							moveTile(Pos(i, j), Pos(i, j2-1));
+							successfulMove = true;
+						}
 					}
 					else {
+						removeTile(Pos(i, j2));
+						moveTile(Pos(i, j), Pos(i, j2));
 						m_tiles[i][j2]->setPowerOf2(pow+1);
 						m_tiles[i][j2]->recentlyFused = true;
+						successfulMove = true;
 					}
 				}
 			}
@@ -106,17 +130,23 @@ void Grid::move(Direction dir) {
 					int i2 = i-1;
 					while (i2 > 0 && m_tiles[i2][j] == nullptr)
 						i2--;
-					removeTile(Pos(i, j));
 					
 					if (m_tiles[i2][j] == nullptr) {
-						addTile(Pos(i2, j), pow);
+						moveTile(Pos(i, j), Pos(i2, j));
+						successfulMove = true;
 					}
 					else if (m_tiles[i2][j]->getPowerOf2() != pow || m_tiles[i2][j]->recentlyFused) {
-						addTile(Pos(i2+1, j), pow);
+						if (i2+1 != i) {
+							moveTile(Pos(i, j), Pos(i2+1, j));
+							successfulMove = true;
+						}
 					}
 					else {
+						removeTile(Pos(i2, j));
+						moveTile(Pos(i, j), Pos(i2, j));
 						m_tiles[i2][j]->setPowerOf2(pow+1);
 						m_tiles[i2][j]->recentlyFused = true;
+						successfulMove = true;
 					}
 				}
 			}
@@ -130,17 +160,23 @@ void Grid::move(Direction dir) {
 					int i2 = i+1;
 					while (i2 < 3 && m_tiles[i2][j] == nullptr)
 						i2++;
-					removeTile(Pos(i, j));
 					
 					if (m_tiles[i2][j] == nullptr) {
-						addTile(Pos(i2, j), pow);
+						moveTile(Pos(i, j), Pos(i2, j));
+						successfulMove = true;
 					}
 					else if (m_tiles[i2][j]->getPowerOf2() != pow || m_tiles[i2][j]->recentlyFused) {
-						addTile(Pos(i2-1, j), pow);
+						if (i2-1 != i) {
+							moveTile(Pos(i, j), Pos(i2-1, j));
+							successfulMove = true;
+						}
 					}
 					else {
+						removeTile(Pos(i2, j));
+						moveTile(Pos(i, j), Pos(i2, j));
 						m_tiles[i2][j]->setPowerOf2(pow+1);
 						m_tiles[i2][j]->recentlyFused = true;
+						successfulMove = true;
 					}
 				}
 			}
@@ -154,10 +190,12 @@ void Grid::move(Direction dir) {
 		}
 	}
 	
-	
-	Pos p(rand()%4, rand()%4);
-	while (m_tiles[p.i][p.j] != nullptr) {
-		p = Pos(rand()%4, rand()%4);
+	if (successfulMove) {
+		Pos p(rand()%4, rand()%4);
+		while (m_tiles[p.i][p.j] != nullptr) {
+			p = Pos(rand()%4, rand()%4);
+		}
+		addTile(p, rand()%2+1);	
 	}
-	addTile(p, rand()%2+1);
+	return successfulMove;
 }
