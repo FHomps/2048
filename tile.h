@@ -7,9 +7,9 @@
 
 struct Pos {
     Pos() {}
-    Pos(int x, int y) : x(x), y(y) {}
-    int x = 0;
-    int y = 0;
+    Pos(int i, int j) : i(i), j(j) {}
+    int i = 0;
+    int j = 0;
 };
 
 class Tile
@@ -17,19 +17,22 @@ class Tile
 public:
     
     Tile() {}
-    Tile(Pos pos, int power) : m_pos(pos), m_power(power) {}
+    Tile(Pos pos, unsigned int power) : m_pos(pos), m_power(power) {}
+	~Tile() {}
     
     void setPosition(Pos pos) { m_pos = pos; }
     Pos getPosition() const { return m_pos; }
     
-    void setPowerOf2(int power) { m_power = power; }
-    int getPowerOf2() const { return m_power; }
+    void setPowerOf2(unsigned int power) { m_power = power; }
+    unsigned int getPowerOf2() const { return m_power; }
     
-    void printTileInfo() const { std::cout << m_pos.x << ' ' << m_pos.y << ' ' << pow(2, m_power) << std::endl; }
+    void printTileInfo() const { std::cout << m_pos.i << ' ' << m_pos.j << ' ' << pow(2, m_power) << std::endl; }
     
+	bool recentlyFused = false;
+	
 private:
     Pos m_pos = Pos(0, 0);
-    int m_power = 0;
+    unsigned int m_power = 0;
 
 };
 

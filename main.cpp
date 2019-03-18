@@ -11,6 +11,12 @@ int main(int argc, char *argv[])
     
     Grid g(&window);
     g.initGrid();
+	
+	for (int i = 0; i < 10; i++) {
+		g.printGrid();
+		g.move(Grid::LEFT);
+		std::cout << std::endl;
+	}
     
     window.show();
     return a.exec();
