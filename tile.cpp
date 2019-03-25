@@ -64,6 +64,8 @@ void Tile::setPosition(Pos pos)
     const int initialY = m_pos.i*(m_height + margin) + margin;
     const int finalY = pos.i*(m_height + margin) + margin;
 
+	m_pos = pos;
+	
     QPropertyAnimation *animation = new QPropertyAnimation(m_label, "geometry");
     animation->setDuration(300);
     animation->setStartValue(QRect(initialX, initialY, m_width, m_height));
