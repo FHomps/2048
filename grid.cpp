@@ -219,7 +219,6 @@ void Grid::move(Grid::Direction dir) {
 }
 
 void Grid::restart() {
-	std::cout << "boop" << std::endl;
 	clearGrid();
 	initGrid();
 }
