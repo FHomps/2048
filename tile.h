@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <math.h>
 #include <QPropertyAnimation>
+#include <QTime>
 
 struct Pos {
     Pos(): i(0), j(0) {}
@@ -28,6 +29,11 @@ public:
 
     bool recentlyFused = false;
 	
+	static QPropertyAnimation const* getLastAnimation();
+	
+public slots:
+	void showTile();
+	
 private:
     static const QString styles[];
     static const int margin;
@@ -38,6 +44,9 @@ private:
     Pos m_pos;
     int m_width;
     int m_height;
+	
+	static QPropertyAnimation* m_lastAnimation;
+	static QTime m_lastAnimationTime;
 };
 
 #endif // TILE_H

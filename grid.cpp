@@ -48,7 +48,9 @@ void Grid::initGrid() {
     clearGrid();
     
     srand(static_cast<uint>(time(nullptr)));
-	addTile(Pos(rand()%4, rand()%4), rand()%2+1);
+	Pos p(rand()%4, rand()%4);
+	addTile(p, rand()%2+1);
+	m_tiles[p.i][p.j]->showTile();	
 }
 
 void Grid::clearGrid() {
@@ -61,6 +63,14 @@ void Grid::clearGrid() {
 
 void Grid::move(Grid::Direction dir) {
 	bool successfulMove = false;
+	
+	for (size_t i = 0; i < 4; i++) { //Utile en cas de spam de touches
+		for (size_t j = 0; j < 4; j++) {
+			if (m_tiles[i][j] != nullptr) {
+				m_tiles[i][j]->showTile();
+			}
+		}
+	}
 	
 	if (dir == LEFT) {
 		for (int j = 1; j < 4; j++) {
@@ -199,6 +209,13 @@ void Grid::move(Grid::Direction dir) {
 			p = Pos(rand()%4, rand()%4);
 		}
 		addTile(p, rand()%2+1);
+		QPropertyAnimation const* anim = Tile::getLastAnimation();
+		for (size_t i = 0; i < 4; i++) {
+			for (size_t j = 0; j < 4; j++) {
+				if (m_tiles[i][j] != nullptr)
+					QObject::connect(anim, SIGNAL(finished()), m_tiles[i][j], SLOT(showTile()));			
+			}
+		}
 	}
 }
 

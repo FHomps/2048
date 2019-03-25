@@ -1,6 +1,9 @@
 #include "tile.h"
 #include <iostream>
 
+QPropertyAnimation* Tile::m_lastAnimation = nullptr;
+QTime Tile::m_lastAnimationTime = QTime::currentTime();
+
 const QString Tile::styles[11] = {
     QString("QLabel { color : black; background-color : #EEE4DA; }"),// 2
     QString("QLabel { color : black; background-color : #EFE0C9; }"),// 4
@@ -37,8 +40,6 @@ Tile::Tile(Pos pos, unsigned int power, QWidget* parent)
     m_label->setStyleSheet(styles[m_power-1]);
     m_label->setFont(QFont("DejaVu", static_cast<int>(0.2*m_height)));
     m_label->setAlignment(Qt::AlignCenter);
-	
-	m_label->show();
 }
 
 void Tile::setPowerOf2(unsigned int power)
@@ -74,9 +75,24 @@ void Tile::setPosition(Pos pos)
     animation->setEndValue(QRect(finalX, finalY, m_width, m_height));
 
     animation->start();
+	
+	QTime tf = QTime::currentTime().addMSecs(300);
+	if (m_lastAnimationTime < tf) {
+		m_lastAnimationTime = tf;
+		m_lastAnimation = animation;
+	}
 }
 
 Pos Tile::getPosition() const
 {
     return m_pos;
+}
+
+QPropertyAnimation const* Tile::getLastAnimation() {
+	return m_lastAnimation;
+}
+
+void Tile::showTile() {
+	if (!m_label->isVisible())
+		m_label->show();
 }
