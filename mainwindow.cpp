@@ -27,6 +27,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Down:
         emit move(Grid::DOWN);
         break;
+	case Qt::Key_Space:
+		emit restartGrid();
+		break;
     default:
         break;
     }

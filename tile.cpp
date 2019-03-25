@@ -37,6 +37,8 @@ Tile::Tile(Pos pos, unsigned int power, QWidget* parent)
     m_label->setStyleSheet(styles[m_power-1]);
     m_label->setFont(QFont("DejaVu", static_cast<int>(0.2*m_height)));
     m_label->setAlignment(Qt::AlignCenter);
+	
+	m_label->show();
 }
 
 void Tile::setPowerOf2(unsigned int power)

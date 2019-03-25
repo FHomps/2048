@@ -15,7 +15,7 @@ public:
 	
     Grid(QWidget* parent);
 	virtual ~Grid();
-    
+	
 	void addTile(Pos pos, unsigned int pow);
 	void removeTile(Pos pos);
 	void moveTile(Pos initialPos, Pos targetPos);
@@ -32,8 +32,10 @@ public:
 		}
 	}
 	
+	
 public slots:
 	void move(Grid::Direction dir);
+	void restart();
 	
 private:	
 	QWidget* m_parent;

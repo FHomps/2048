@@ -5,7 +5,6 @@
 #include <QApplication>
 #include <QWidget>
 #include <QKeyEvent>
-#include "tile.h"
 #include "grid.h"
 
 class MainWindow : public QMainWindow
@@ -19,6 +18,7 @@ public:
 
 signals:
     void move(Grid::Direction);
+	void restartGrid();
 };
 
 #endif // MAINWINDOW_H

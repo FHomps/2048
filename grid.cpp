@@ -1,6 +1,8 @@
 #include "grid.h"
 #include <random>
 
+#include <QApplication>
+
 #include <iostream>
 
 Grid::Grid(QWidget* parent) : m_parent(parent) {
@@ -19,6 +21,7 @@ inline bool within(int i, int min, int max) { return i >= min && i < max; }
 
 void Grid::addTile(Pos pos, unsigned int pow) {
 	if (m_tiles[pos.i][pos.j] == nullptr) {
+		std::cout << "beep" << std::endl;
 		m_tiles[pos.i][pos.j] = new Tile(pos, pow, m_parent);
 	}
 	else {
@@ -195,6 +198,12 @@ void Grid::move(Grid::Direction dir) {
 		while (m_tiles[p.i][p.j] != nullptr) {
 			p = Pos(rand()%4, rand()%4);
 		}
-		addTile(p, rand()%2+1);	
+		addTile(p, rand()%2+1);
 	}
+}
+
+void Grid::restart() {
+	std::cout << "boop" << std::endl;
+	clearGrid();
+	initGrid();
 }

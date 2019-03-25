@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
     Grid grid(&window);
 	
 	QObject::connect(&window, SIGNAL(move(Grid::Direction)), &grid, SLOT(move(Grid::Direction)));
+	QObject::connect(&window, SIGNAL(restartGrid()), &grid, SLOT(restart()));
 	
     grid.initGrid();
 
