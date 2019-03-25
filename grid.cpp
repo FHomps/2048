@@ -63,7 +63,9 @@ void Grid::clearGrid() {
 void Grid::move(Grid::Direction dir) {
 	bool successfulMove = false;
 	
-	for (size_t i = 0; i < 4; i++) { //Utile en cas de spam de touches
+	//Met à jour l'affichage des objets en début du tour
+	//Utile en cas de spam de touches
+	for (size_t i = 0; i < 4; i++) {
 		for (size_t j = 0; j < 4; j++) {
 			if (m_tiles[i][j] != nullptr) {
 				m_tiles[i][j]->showTile();
@@ -212,7 +214,7 @@ void Grid::move(Grid::Direction dir) {
 		for (size_t i = 0; i < 4; i++) {
 			for (size_t j = 0; j < 4; j++) {
 				if (m_tiles[i][j] != nullptr)
-					QObject::connect(anim, SIGNAL(finished()), m_tiles[i][j], SLOT(showTile()));			
+					QObject::connect(anim, SIGNAL(finished()), m_tiles[i][j], SLOT(showTile())); //Met à jour l'affichage des objets à la fin des animations du tour	
 			}
 		}
 	}
