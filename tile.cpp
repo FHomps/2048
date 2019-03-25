@@ -17,21 +17,10 @@ const QString Tile::styles[11] = {
 
 const int Tile::margin = 5;
 
-Tile::Tile()
-{
-    m_power = 0;
-    m_pos = Pos(0,0);
-    m_fused = false;
-    m_parent = nullptr;
-
-    m_label = new QLabel(QString().setNum(std::pow(2,m_power)));
-    m_label->setStyleSheet(styles[0]);
-}
-
 Tile::Tile(Pos pos, unsigned int power, QWidget* parent)
 {
     m_parent = parent;
-    m_fused = false;
+    recentlyFused = false;
 
     m_width = static_cast<int>((m_parent->geometry().width() - 5*margin) / 4);
     m_height = static_cast<int>((m_parent->geometry().height() - 5*margin) / 4);
@@ -50,7 +39,7 @@ Tile::Tile(Pos pos, unsigned int power, QWidget* parent)
     m_label->setAlignment(Qt::AlignCenter);
 }
 
-void Tile::setPower(unsigned int power)
+void Tile::setPowerOf2(unsigned int power)
 {
     if (power < 1 || power > 11)
         throw std::domain_error("invalid power: unsigned int power must be in [1,11]");
@@ -59,7 +48,7 @@ void Tile::setPower(unsigned int power)
     m_label->setStyleSheet(styles[m_power-1]);
 }
 
-unsigned int Tile::power() const
+unsigned int Tile::getPowerOf2() const
 {
     return m_power;
 }
@@ -83,7 +72,7 @@ void Tile::setPosition(Pos pos)
     animation->start();
 }
 
-Pos Tile::position() const
+Pos Tile::getPosition() const
 {
     return m_pos;
 }

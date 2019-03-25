@@ -8,11 +8,13 @@
 
 class Grid : public QWidget
 {
+	Q_OBJECT
+	
 public:
 	enum Direction { UP, DOWN, RIGHT, LEFT };
 	
-    Grid(QWidget* parent = nullptr);
-	~Grid();
+    Grid(QWidget* parent);
+	virtual ~Grid();
     
 	void addTile(Pos pos, unsigned int pow);
 	void removeTile(Pos pos);
@@ -20,9 +22,7 @@ public:
 	
     void initGrid();
 	void clearGrid();
-	
-	bool move(Direction dir);
-	
+		
 	void printGrid() const {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
@@ -31,8 +31,13 @@ public:
 			std::cout << std::endl;
 		}
 	}
-    
-private:
+	
+public slots:
+	void move(Grid::Direction dir);
+	
+private:	
+	QWidget* m_parent;
+	
 	Tile* m_tiles[4][4];
 };
 

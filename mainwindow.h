@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QKeyEvent>
 #include "tile.h"
+#include "grid.h"
 
 class MainWindow : public QMainWindow
 {
@@ -17,19 +18,7 @@ public:
     void keyPressEvent(QKeyEvent *event);
 
 signals:
-    void left();
-    void right();
-    void up();
-    void down();
-
-    //test
-    void move(Pos pos);
-    
-private:
-    Tile *m_tile1;
-    Tile *m_tile2;
-    Tile *m_tile3;
-    Tile *m_tile4;
+    void move(Grid::Direction);
 };
 
 #endif // MAINWINDOW_H

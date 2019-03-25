@@ -14,21 +14,18 @@ struct Pos {
 
 class Tile: public QObject
 {
-    Q_OBJECT
 public:
-    Tile();
     Tile(Pos pos, unsigned int power, QWidget *parent);
+	virtual ~Tile() {}
 
-    void setPower(unsigned int power);
-    unsigned int power() const;
+    void setPowerOf2(unsigned int power);
+    unsigned int getPowerOf2() const;
 
     void setPosition(Pos pos);
-    Pos position() const;
+    Pos getPosition() const;
 
-    void fadeIn();
-    void fadeOut();
 
-    bool m_fused;
+    bool recentlyFused = false;
 private:
     static const QString styles[];
     static const int margin;

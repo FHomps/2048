@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-Grid::Grid(QWidget* parent) : QWidget (parent) {
+Grid::Grid(QWidget* parent) : m_parent(parent) {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
 			m_tiles[i][j] = nullptr;
@@ -19,7 +19,7 @@ inline bool within(int i, int min, int max) { return i >= min && i < max; }
 
 void Grid::addTile(Pos pos, unsigned int pow) {
 	if (m_tiles[pos.i][pos.j] == nullptr) {
-		m_tiles[pos.i][pos.j] = new Tile(pos, pow);
+		m_tiles[pos.i][pos.j] = new Tile(pos, pow, m_parent);
 	}
 	else {
 		m_tiles[pos.i][pos.j]->setPowerOf2(pow);
@@ -56,7 +56,7 @@ void Grid::clearGrid() {
 	}
 }
 
-bool Grid::move(Direction dir) {
+void Grid::move(Grid::Direction dir) {
 	bool successfulMove = false;
 	
 	if (dir == LEFT) {
@@ -197,5 +197,4 @@ bool Grid::move(Direction dir) {
 		}
 		addTile(p, rand()%2+1);	
 	}
-	return successfulMove;
 }

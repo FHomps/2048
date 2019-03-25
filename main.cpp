@@ -9,14 +9,12 @@ int main(int argc, char *argv[])
     MainWindow window;
     window.setFixedSize(640, 480);
     
-    Grid g(&window);
-    g.initGrid();
-
-	do {
-		g.printGrid();
-		std::cout << std::endl;
-	} while (g.move(Grid::LEFT));
+    Grid grid(&window);
 	
+	QObject::connect(&window, SIGNAL(move(Grid::Direction)), &grid, SLOT(move(Grid::Direction)));
+	
+    grid.initGrid();
+
     window.show();
     return a.exec();
 }
