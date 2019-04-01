@@ -18,7 +18,7 @@ public:
 
 signals:
     void move(Grid::Direction);
-	void restartGrid();
+    void restartGrid();
 };
 
 #endif // MAINWINDOW_H
