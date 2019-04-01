@@ -3,7 +3,6 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    this->setGeometry(0,0,480,480);
 }
 
 MainWindow::~MainWindow()

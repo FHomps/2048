@@ -20,25 +20,25 @@ const QString Tile::styles[11] = {
 
 const int Tile::margin = 5;
 
-Tile::Tile(Pos pos, unsigned int power, QWidget* parent)
+Tile::Tile(Pos pos, unsigned int power, QWidget* parent, Pos const& gridSize)
 {
     m_parent = parent;
     recentlyFused = false;
-
-    m_width = static_cast<int>((m_parent->geometry().width() - 5*margin) / 4);
-    m_height = static_cast<int>((m_parent->geometry().height() - 5*margin) / 4);
+	
+    m_width = static_cast<int>((m_parent->geometry().width() - (gridSize.j+1)*margin) / gridSize.j);
+    m_height = static_cast<int>((m_parent->geometry().height() - (gridSize.i+1)*margin) / gridSize.i);
 
     if (power < 1 || power > 11)
         throw std::domain_error("invalid power: unsigned int power must be in [1,11]");
-    if (pos.i < 0 || pos.i > 3 || pos.j < 0 || pos.j > 3)
-        throw std::domain_error("invalid position: coordinates must be in [0,3]");
+    if (pos.i < 0 || pos.j < 0)
+        throw std::domain_error("invalid position: coordinates must be positive");
     m_power = power;
     m_pos = pos;
 
     m_label = new QLabel(QString().setNum(std::pow(2,m_power)), parent);
     m_label->setGeometry(pos.j*(m_width + margin) + margin, pos.i*(m_height + margin) + margin, m_width, m_height);
     m_label->setStyleSheet(styles[m_power-1]);
-    m_label->setFont(QFont("DejaVu", static_cast<int>(0.2*m_height)));
+    m_label->setFont(QFont("DejaVu", static_cast<int>(std::min(0.2*m_height, 0.2*m_width))));
     m_label->setAlignment(Qt::AlignCenter);
 }
 
@@ -58,8 +58,8 @@ unsigned int Tile::getPowerOf2() const
 
 void Tile::setPosition(Pos pos)
 {
-    if (pos.i < 0 || pos.i > 3 || pos.j < 0 || pos.j > 3)
-        throw std::domain_error("invalid position: coordinates must be in [0,3]");
+    if (pos.i < 0 || pos.j < 0)
+        throw std::domain_error("invalid position: coordinates must be positive");
 
     const int initialX = m_pos.j*(m_width + margin) + margin;
     const int finalX = pos.j*(m_width + margin) + margin;
