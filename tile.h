@@ -18,7 +18,7 @@ class Tile: public QObject
 	Q_OBJECT
 	
 public:
-    Tile(Pos pos, unsigned int power, QWidget *parent);
+    Tile(Pos pos, unsigned int power, QWidget *parent, Pos const& gridSize);
 	virtual ~Tile() { delete m_label; }
 
     void setPowerOf2(unsigned int power);
