@@ -5,17 +5,17 @@ QPropertyAnimation* Tile::m_lastAnimation = nullptr;
 QTime Tile::m_lastAnimationTime = QTime::currentTime();
 
 const QString Tile::styles[11] = {
-    QString("QLabel { color : black; background-color : #EEE4DA; }"),// 2
-    QString("QLabel { color : black; background-color : #EFE0C9; }"),// 4
-    QString("QLabel { color : while; background-color : #F2B179; }"),// 8
-    QString("QLabel { color : white; background-color : #F69463; }"),// 16
-    QString("QLabel { color : white; background-color : #F57C5F; }"),// 32
-    QString("QLabel { color : white; background-color : #FA5D3A; }"),// 64
-    QString("QLabel { color : white; background-color : #F1D071; }"),// 128
-    QString("QLabel { color : white; background-color : #F2CD62; }"),// 256
-    QString("QLabel { color : white; background-color : #ECC751; }"),// 512
-    QString("QLabel { color : white; background-color : #EDC53F; }"),// 1024
-    QString("QLabel { color : white; background-color : #EEC22E; }")// 2048
+    QString("QLabel { color : black; background-color : #EEE4DA; border-radius: 16px; }"),// 2
+    QString("QLabel { color : black; background-color : #EFE0C9; border-radius: 16px; }"),// 4
+    QString("QLabel { color : while; background-color : #F2B179; border-radius: 16px; }"),// 8
+    QString("QLabel { color : white; background-color : #F69463; border-radius: 16px; }"),// 16
+    QString("QLabel { color : white; background-color : #F57C5F; border-radius: 16px; }"),// 32
+    QString("QLabel { color : white; background-color : #FA5D3A; border-radius: 16px; }"),// 64
+    QString("QLabel { color : white; background-color : #F1D071; border-radius: 16px; }"),// 128
+    QString("QLabel { color : white; background-color : #F2CD62; border-radius: 16px; }"),// 256
+    QString("QLabel { color : white; background-color : #ECC751; border-radius: 16px; }"),// 512
+    QString("QLabel { color : white; background-color : #EDC53F; border-radius: 16px; }"),// 1024
+    QString("QLabel { color : white; background-color : #EEC22E; border-radius: 16px; }")// 2048
 };
 
 const int Tile::margin = 5;
