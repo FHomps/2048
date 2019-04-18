@@ -13,12 +13,17 @@ class MainWindow : public QMainWindow
     
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(int width, int height, QWidget *parent = nullptr);
     ~MainWindow();
     void keyPressEvent(QKeyEvent *event);
 
 signals:
     void move(Grid::Direction);
     void restartGrid();
+
+private:
+    Grid* grid;
+    QLabel score;
 };
 
 #endif // MAINWINDOW_H

@@ -26,7 +26,8 @@ Grid::~Grid() {
 inline bool within(int i, int min, int max) { return i >= min && i < max; }
 
 void Grid::addTile(Pos pos, unsigned int pow) {
-	if (m_tiles[pos.i][pos.j] == nullptr) {
+	if (m_tiles[pos.i][pos.j] == nullptr)
+  {
 		m_tiles[pos.i][pos.j] = new Tile(pos, pow, m_parent, gridSize);
 	}
 	else {

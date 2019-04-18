@@ -1,8 +1,19 @@
 #include "mainwindow.h"
 #include "tile.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+MainWindow::MainWindow(int width, int height, QWidget *parent) : QMainWindow(parent)
 {
+    this->setFixedSize((width > 100 ? width : 100), (height > 100 ? height : 100));
+
+    grid = new Grid(this);
+    const int gridSize((width < 0.8*height ? width : static_cast<int>(0.8*height)));
+    grid->setGeometry(0,0,gridSize,gridSize);
+    grid->setStyleSheet("QWidget { background-color: #CDC1B4; }");
+
+    QObject::connect(this, SIGNAL(move(Grid::Direction)), grid, SLOT(move(Grid::Direction)));
+    QObject::connect(this, SIGNAL(restartGrid()), grid, SLOT(restart()));
+
+    grid->initGrid();
 }
 
 MainWindow::~MainWindow()
