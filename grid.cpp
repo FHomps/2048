@@ -5,9 +5,11 @@
 
 #include <iostream>
 
-Grid::Grid(QWidget* parent) : m_parent(parent) {
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
+Grid::Grid(QWidget* parent, Pos arg_gridSize) :  gridSize(arg_gridSize.i > 1 && arg_gridSize.j > 1 ? arg_gridSize : Pos(4, 4)), m_parent(parent) {
+	m_tiles = new Tile**[gridSize.i];	
+	for (int i = 0; i < gridSize.i; i++) {
+		m_tiles[i] = new Tile*[gridSize.j];
+		for (int j = 0; j < gridSize.j; j++) {
 			m_tiles[i][j] = nullptr;
 		}
 	}
@@ -15,13 +17,18 @@ Grid::Grid(QWidget* parent) : m_parent(parent) {
 
 Grid::~Grid() {
 	clearGrid();
+	for (int i = 0; i < gridSize.i; i++) {
+		delete[] m_tiles[i];
+	}
+	delete[] m_tiles;
 }
 
 inline bool within(int i, int min, int max) { return i >= min && i < max; }
 
 void Grid::addTile(Pos pos, unsigned int pow) {
-	if (m_tiles[pos.i][pos.j] == nullptr) {
-        m_tiles[pos.i][pos.j] = new Tile(pos, pow, m_parent);
+	if (m_tiles[pos.i][pos.j] == nullptr)
+  {
+		m_tiles[pos.i][pos.j] = new Tile(pos, pow, m_parent, gridSize);
 	}
 	else {
 		m_tiles[pos.i][pos.j]->setPowerOf2(pow);
@@ -47,14 +54,14 @@ void Grid::initGrid() {
     clearGrid();
     
     srand(static_cast<uint>(time(nullptr)));
-	Pos p(rand()%4, rand()%4);
+	Pos p(rand()%gridSize.i, rand()%gridSize.j);
 	addTile(p, rand()%2+1);
 	m_tiles[p.i][p.j]->showTile();	
 }
 
 void Grid::clearGrid() {
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
+	for (int i = 0; i < gridSize.i; i++) {
+		for (int j = 0; j < gridSize.j; j++) {
 			removeTile(Pos(i, j));
 		}
 	}
@@ -65,8 +72,8 @@ void Grid::move(Grid::Direction dir) {
 	
 	//Met à jour l'affichage des objets en début du tour
 	//Utile en cas de spam de touches
-	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+	for (int i = 0; i < gridSize.i; i++) {
+		for (int j = 0; j < gridSize.j; j++) {
 			if (m_tiles[i][j] != nullptr) {
 				m_tiles[i][j]->showTile();
 			}
@@ -74,8 +81,8 @@ void Grid::move(Grid::Direction dir) {
 	}
 	
 	if (dir == LEFT) {
-		for (int j = 1; j < 4; j++) {
-			for (int i = 0; i < 4; i++) {
+		for (int j = 1; j < gridSize.j; j++) {
+			for (int i = 0; i < gridSize.i; i++) {
 				if (m_tiles[i][j] != nullptr) {
 					unsigned int pow = m_tiles[i][j]->getPowerOf2();
 					int j2 = j-1;
@@ -99,6 +106,7 @@ void Grid::move(Grid::Direction dir) {
 						removeTile(Pos(i, j2));
 						moveTile(Pos(i, j), Pos(i, j2));
 						m_tiles[i][j2]->setPowerOf2(pow+1);
+						m_score += std::pow(2, pow+1);
 						m_tiles[i][j2]->recentlyFused = true;
 						successfulMove = true;
 					}
@@ -107,12 +115,12 @@ void Grid::move(Grid::Direction dir) {
 		}
 	}
 	else if (dir == RIGHT) {
-		for (int j = 2; j >= 0; j--) {
-			for (int i = 0; i < 4; i++) {
+		for (int j = gridSize.j-2; j >= 0; j--) {
+			for (int i = 0; i < gridSize.i; i++) {
 				if (m_tiles[i][j] != nullptr) {
 					unsigned int pow = m_tiles[i][j]->getPowerOf2();
 					int j2 = j+1;
-					while (j2 < 3 && m_tiles[i][j2] == nullptr)
+					while (j2 < gridSize.j-1 && m_tiles[i][j2] == nullptr)
 						j2++;
 					
 					if (m_tiles[i][j2] == nullptr) {
@@ -129,6 +137,7 @@ void Grid::move(Grid::Direction dir) {
 						removeTile(Pos(i, j2));
 						moveTile(Pos(i, j), Pos(i, j2));
 						m_tiles[i][j2]->setPowerOf2(pow+1);
+						m_score += std::pow(2, pow+1);
 						m_tiles[i][j2]->recentlyFused = true;
 						successfulMove = true;
 					}
@@ -137,8 +146,8 @@ void Grid::move(Grid::Direction dir) {
 		}
 	}
 	else if (dir == UP) {
-		for (int i = 1; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
+		for (int i = 1; i < gridSize.i; i++) {
+			for (int j = 0; j < gridSize.j; j++) {
 				if (m_tiles[i][j] != nullptr) {
 					unsigned int pow = m_tiles[i][j]->getPowerOf2();
 					int i2 = i-1;
@@ -159,6 +168,7 @@ void Grid::move(Grid::Direction dir) {
 						removeTile(Pos(i2, j));
 						moveTile(Pos(i, j), Pos(i2, j));
 						m_tiles[i2][j]->setPowerOf2(pow+1);
+						m_score += std::pow(2, pow+1);
 						m_tiles[i2][j]->recentlyFused = true;
 						successfulMove = true;
 					}
@@ -167,12 +177,12 @@ void Grid::move(Grid::Direction dir) {
 		}
 	}
 	else if (dir == DOWN) {
-		for (int i = 2; i >= 0; i--) {
-			for (int j = 0; j < 4; j++) {
+		for (int i = gridSize.i-2; i >= 0; i--) {
+			for (int j = 0; j < gridSize.j; j++) {
 				if (m_tiles[i][j] != nullptr) {
 					unsigned int pow = m_tiles[i][j]->getPowerOf2();
 					int i2 = i+1;
-					while (i2 < 3 && m_tiles[i2][j] == nullptr)
+					while (i2 < gridSize.i-1 && m_tiles[i2][j] == nullptr)
 						i2++;
 					
 					if (m_tiles[i2][j] == nullptr) {
@@ -189,6 +199,7 @@ void Grid::move(Grid::Direction dir) {
 						removeTile(Pos(i2, j));
 						moveTile(Pos(i, j), Pos(i2, j));
 						m_tiles[i2][j]->setPowerOf2(pow+1);
+						m_score += std::pow(2, pow+1);
 						m_tiles[i2][j]->recentlyFused = true;
 						successfulMove = true;
 					}
@@ -197,22 +208,22 @@ void Grid::move(Grid::Direction dir) {
 		}
 	}
 	
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
+	for (int i = 0; i < gridSize.i; i++) {
+		for (int j = 0; j < gridSize.j; j++) {
 			if (m_tiles[i][j] != nullptr)
 				m_tiles[i][j]->recentlyFused = false;
 		}
 	}
 	
 	if (successfulMove) {
-		Pos p(rand()%4, rand()%4);
+		Pos p(rand()%gridSize.i, rand()%gridSize.j);
 		while (m_tiles[p.i][p.j] != nullptr) {
-			p = Pos(rand()%4, rand()%4);
+			p = Pos(rand()%gridSize.i, rand()%gridSize.j);
 		}
 		addTile(p, rand()%2+1);
 		QPropertyAnimation const* anim = Tile::getLastAnimation();
-		for (size_t i = 0; i < 4; i++) {
-			for (size_t j = 0; j < 4; j++) {
+		for (int i = 0; i < gridSize.i; i++) {
+			for (int j = 0; j < gridSize.j; j++) {
 				if (m_tiles[i][j] != nullptr)
 					QObject::connect(anim, SIGNAL(finished()), m_tiles[i][j], SLOT(showTile())); //Met à jour l'affichage des objets à la fin des animations du tour	
 			}
