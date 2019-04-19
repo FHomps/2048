@@ -12,6 +12,7 @@ Grid::Grid(QWidget* parent, Pos arg_gridSize) :  gridSize(arg_gridSize.i > 1 && 
     m_scoreLabel->setText(QString("     Score: ") + QString::number(0));
     m_scoreLabel->setGeometry(0, 0, m_parent->geometry().width(), static_cast<int>(0.1*m_parent->geometry().height()));
     m_scoreLabel->setStyleSheet("QLabel { color : black; font-size: 16px; background-color : #CDC1B4; border-radius: 16px; }");
+    m_scoreLabel->show();
 
     m_tiles = new Tile**[gridSize.i];
 	for (int i = 0; i < gridSize.i; i++) {
@@ -28,6 +29,7 @@ Grid::~Grid() {
 		delete[] m_tiles[i];
 	}
 	delete[] m_tiles;
+    delete m_scoreLabel;
 }
 
 inline bool within(int i, int min, int max) { return i >= min && i < max; }
