@@ -46,11 +46,20 @@ Tile::Tile(Pos pos, unsigned int power, QWidget* parent, Pos const& gridSize)
 
 void Tile::setPowerOf2(unsigned int power)
 {
-    if (power < 1 || power > 11)
-        throw std::domain_error("invalid power: unsigned int power must be in [1,11]");
-    m_power = power;
-    m_label->setText(QString().setNum(std::pow(2,m_power)));
-    m_label->setStyleSheet(styles[m_power-1]);
+    if (power < 1)
+        throw std::domain_error("invalid power: unsigned int power must be in >= 1");
+    else if (power > 10)
+    {
+        m_power = power;
+        m_label->setText("You've\nwon");
+        m_label->setStyleSheet(styles[10]);
+    }
+    else
+    {
+        m_power = power;
+        m_label->setText(QString().setNum(std::pow(2,m_power)));
+        m_label->setStyleSheet(styles[m_power-1]);
+    }
 }
 
 unsigned int Tile::getPowerOf2() const
@@ -93,7 +102,8 @@ Pos Tile::getPosition() const
 }
 
 void Tile::makeLost() {
-	//TODO
+    m_label->setStyleSheet(QString("QLabel { color : white; background-color : #CDC1B4; border-radius: 16px; }"));
+    m_label->setText("Game\nOver");
 }
 
 QPropertyAnimation const* Tile::getLastAnimation() {

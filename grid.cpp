@@ -275,16 +275,15 @@ void Grid::move(Grid::Direction dir) {
 					QObject::connect(anim, SIGNAL(finished()), m_tiles[i][j], SLOT(showTile())); //Met à jour l'affichage des objets à la fin des animations du tour	
 			}
 		}
-		
-		hasLost = checkForLoss();
-		if (hasLost) {
-			for (int i = 0; i < gridSize.i; i++) {
-				for (int j = 0; j < gridSize.j; j++) {
-					m_tiles[i][j]->makeLost();
-				}
-			}
-		}
-	}	
+    }
+    hasLost = checkForLoss();
+    if (hasLost) {
+        for (int i = 0; i < gridSize.i; i++) {
+            for (int j = 0; j < gridSize.j; j++) {
+                m_tiles[i][j]->makeLost();
+            }
+        }
+    }
 }
 
 void Grid::restart() {
