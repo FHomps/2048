@@ -5,6 +5,7 @@
 #include "tile.h"
 #include <vector>
 #include <iostream>
+#include <QPushButton>
 
 class Grid : public QWidget
 {
@@ -46,6 +47,7 @@ private:
 	Tile*** m_tiles;
 	
 	uint m_score = 0;
+    QLabel* m_scoreLabel;
 };
 
 #endif // GRID_H

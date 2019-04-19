@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     items << "480x480" << "720x480" << "1280x720" << "1920x1080";
 
     bool ok;
-    QString item = QInputDialog::getItem(nullptr, "Screen resolution", "Resolution: ", items, 0, false, &ok);
+    const QString item = QInputDialog::getItem(nullptr, "Screen resolution", "Resolution: ", items, 0, false, &ok);
 
     int width = 480;
     int height = 480;

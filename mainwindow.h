@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QKeyEvent>
+#include <QPushButton>
 #include "grid.h"
 
 class MainWindow : public QMainWindow
@@ -17,13 +18,18 @@ public:
     ~MainWindow();
     void keyPressEvent(QKeyEvent *event);
 
+public slots:
+    void openSettings();
+    void newGrid(int rowNumber, int colNumber);
+
 signals:
     void move(Grid::Direction);
     void restartGrid();
+    void settings();
+    void quit();
 
 private:
-    Grid* grid;
-    QLabel score;
+    Grid* m_grid;
 };
 
 #endif // MAINWINDOW_H

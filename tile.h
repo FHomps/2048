@@ -5,6 +5,7 @@
 #include <math.h>
 #include <QPropertyAnimation>
 #include <QTime>
+#include <QVector>
 
 struct Pos {
     Pos(): i(0), j(0) {}
@@ -30,12 +31,12 @@ public:
     bool recentlyFused = false;
 	
 	static QPropertyAnimation const* getLastAnimation();
-	
+    static QVector<QString> styles;
+
 public slots:
 	void showTile();
 	
 private:
-    static const QString styles[];
     static const int margin;
 
     QWidget* m_parent;

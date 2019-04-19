@@ -4,10 +4,10 @@
 QPropertyAnimation* Tile::m_lastAnimation = nullptr;
 QTime Tile::m_lastAnimationTime = QTime::currentTime();
 
-const QString Tile::styles[11] = {
+QVector<QString> Tile::styles = {
     QString("QLabel { color : black; background-color : #EEE4DA; border-radius: 16px; }"),// 2
     QString("QLabel { color : black; background-color : #EFE0C9; border-radius: 16px; }"),// 4
-    QString("QLabel { color : while; background-color : #F2B179; border-radius: 16px; }"),// 8
+    QString("QLabel { color : white; background-color : #F2B179; border-radius: 16px; }"),// 8
     QString("QLabel { color : white; background-color : #F69463; border-radius: 16px; }"),// 16
     QString("QLabel { color : white; background-color : #F57C5F; border-radius: 16px; }"),// 32
     QString("QLabel { color : white; background-color : #FA5D3A; border-radius: 16px; }"),// 64
@@ -26,7 +26,7 @@ Tile::Tile(Pos pos, unsigned int power, QWidget* parent, Pos const& gridSize)
     recentlyFused = false;
 	
     m_width = static_cast<int>((m_parent->geometry().width() - (gridSize.j+1)*margin) / gridSize.j);
-    m_height = static_cast<int>((m_parent->geometry().height() - (gridSize.i+1)*margin) / gridSize.i);
+    m_height = static_cast<int>((0.9*m_parent->geometry().height() - (gridSize.i+1)*margin) / gridSize.i);
 
     if (power < 1 || power > 11)
         throw std::domain_error("invalid power: unsigned int power must be in [1,11]");
@@ -36,7 +36,9 @@ Tile::Tile(Pos pos, unsigned int power, QWidget* parent, Pos const& gridSize)
     m_pos = pos;
 
     m_label = new QLabel(QString().setNum(std::pow(2,m_power)), parent);
-    m_label->setGeometry(pos.j*(m_width + margin) + margin, pos.i*(m_height + margin) + margin, m_width, m_height);
+
+    const int offset = static_cast<int>(0.1*m_parent->geometry().height());
+    m_label->setGeometry(pos.j*(m_width + margin) + margin, pos.i*(m_height + margin) + margin + offset, m_width, m_height);
     m_label->setStyleSheet(styles[m_power-1]);
     m_label->setFont(QFont("DejaVu", static_cast<int>(std::min(0.2*m_height, 0.2*m_width))));
     m_label->setAlignment(Qt::AlignCenter);
@@ -64,8 +66,10 @@ void Tile::setPosition(Pos pos)
     const int initialX = m_pos.j*(m_width + margin) + margin;
     const int finalX = pos.j*(m_width + margin) + margin;
 
-    const int initialY = m_pos.i*(m_height + margin) + margin;
-    const int finalY = pos.i*(m_height + margin) + margin;
+    const int offset = static_cast<int>(0.1*m_parent->geometry().height());
+
+    const int initialY = m_pos.i*(m_height + margin) + margin + offset;
+    const int finalY = pos.i*(m_height + margin) + margin + offset;
 
 	m_pos = pos;
 	

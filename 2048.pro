@@ -28,12 +28,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     grid.cpp \
-    tile.cpp
+    tile.cpp \
+    colorwindow.cpp
 
 HEADERS += \
         mainwindow.h \
     grid.h \
-    tile.h
+    tile.h \
+    colorwindow.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

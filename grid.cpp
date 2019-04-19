@@ -5,8 +5,15 @@
 
 #include <iostream>
 
+#include <QString>
+
 Grid::Grid(QWidget* parent, Pos arg_gridSize) :  gridSize(arg_gridSize.i > 1 && arg_gridSize.j > 1 ? arg_gridSize : Pos(4, 4)), m_parent(parent) {
-	m_tiles = new Tile**[gridSize.i];	
+    m_scoreLabel = new QLabel(m_parent);
+    m_scoreLabel->setText(QString("     Score: ") + QString::number(0));
+    m_scoreLabel->setGeometry(0, 0, m_parent->geometry().width(), static_cast<int>(0.1*m_parent->geometry().height()));
+    m_scoreLabel->setStyleSheet("QLabel { color : black; font-size: 16px; background-color : #CDC1B4; border-radius: 16px; }");
+
+    m_tiles = new Tile**[gridSize.i];
 	for (int i = 0; i < gridSize.i; i++) {
 		m_tiles[i] = new Tile*[gridSize.j];
 		for (int j = 0; j < gridSize.j; j++) {
@@ -56,7 +63,10 @@ void Grid::initGrid() {
     srand(static_cast<uint>(time(nullptr)));
 	Pos p(rand()%gridSize.i, rand()%gridSize.j);
 	addTile(p, rand()%2+1);
-	m_tiles[p.i][p.j]->showTile();	
+    m_tiles[p.i][p.j]->showTile();
+
+    m_score = 0;
+    m_scoreLabel->setText(QString("     Score: ") + QString::number(0));
 }
 
 void Grid::clearGrid() {
@@ -107,6 +117,7 @@ void Grid::move(Grid::Direction dir) {
 						moveTile(Pos(i, j), Pos(i, j2));
 						m_tiles[i][j2]->setPowerOf2(pow+1);
 						m_score += std::pow(2, pow+1);
+                        m_scoreLabel->setText(QString("     Score: ") + QString::number(m_score));
 						m_tiles[i][j2]->recentlyFused = true;
 						successfulMove = true;
 					}
@@ -138,6 +149,7 @@ void Grid::move(Grid::Direction dir) {
 						moveTile(Pos(i, j), Pos(i, j2));
 						m_tiles[i][j2]->setPowerOf2(pow+1);
 						m_score += std::pow(2, pow+1);
+                        m_scoreLabel->setText(QString("     Score: ") + QString::number(m_score));
 						m_tiles[i][j2]->recentlyFused = true;
 						successfulMove = true;
 					}
@@ -169,6 +181,7 @@ void Grid::move(Grid::Direction dir) {
 						moveTile(Pos(i, j), Pos(i2, j));
 						m_tiles[i2][j]->setPowerOf2(pow+1);
 						m_score += std::pow(2, pow+1);
+                        m_scoreLabel->setText(QString("     Score: ") + QString::number(m_score));
 						m_tiles[i2][j]->recentlyFused = true;
 						successfulMove = true;
 					}
@@ -200,6 +213,7 @@ void Grid::move(Grid::Direction dir) {
 						moveTile(Pos(i, j), Pos(i2, j));
 						m_tiles[i2][j]->setPowerOf2(pow+1);
 						m_score += std::pow(2, pow+1);
+                        m_scoreLabel->setText(QString("     Score: ") + QString::number(m_score));
 						m_tiles[i2][j]->recentlyFused = true;
 						successfulMove = true;
 					}
