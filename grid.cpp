@@ -77,9 +77,40 @@ void Grid::clearGrid() {
 			removeTile(Pos(i, j));
 		}
 	}
+	hasLost = false;
+}
+
+bool Grid::checkForLoss() const {
+	//Vérifie si toutes les cases sont remplies
+	for (int i = 0; i < gridSize.i; i++) {
+		for (int j = 0; j < gridSize.j; j++) {
+			if (m_tiles[i][j] == nullptr) {
+				return false;
+			}
+		}
+	}
+	
+	//Vérifie si des mouvements sont possibles
+	for (int i = 0; i < gridSize.i; i++) {
+		for (int j = i%2; j < gridSize.j; j+=2) { //On teste une case sur deux, tester toutes les cases n'est pas nécessaire
+			for (int i2 = i-1; i2 <= i+1; i2+=2) {
+				for (int j2 = j-1; j2 <= j+1; j2+=2) {
+					if (i2 > 0 && i2 < gridSize.i && j2 > 0 && j2 < gridSize.j && (m_tiles[i2][j2]->getPowerOf2() == m_tiles[i][j]->getPowerOf2())) {
+						return false;
+					}
+				}
+			}
+		}
+	}
+	
+	return true;
 }
 
 void Grid::move(Grid::Direction dir) {
+	if (hasLost) {
+		return;
+	}
+	
 	bool successfulMove = false;
 	
 	//Met à jour l'affichage des objets en début du tour
@@ -244,7 +275,16 @@ void Grid::move(Grid::Direction dir) {
 					QObject::connect(anim, SIGNAL(finished()), m_tiles[i][j], SLOT(showTile())); //Met à jour l'affichage des objets à la fin des animations du tour	
 			}
 		}
-	}
+		
+		hasLost = checkForLoss();
+		if (hasLost) {
+			for (int i = 0; i < gridSize.i; i++) {
+				for (int j = 0; j < gridSize.j; j++) {
+					m_tiles[i][j]->makeLost();
+				}
+			}
+		}
+	}	
 }
 
 void Grid::restart() {

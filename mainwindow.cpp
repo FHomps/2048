@@ -8,7 +8,7 @@ MainWindow::MainWindow(int width, int height, QWidget *parent) : QMainWindow(par
 {
     this->setFixedSize((width > 100 ? width : 100), (height > 100 ? height : 100));
 
-    QMessageBox::information(this, "Shortcuts", "Game Shortcuts:\nMove tiles with arrows\nReset game with space\nOpen settings dialog with S\nResume with Q");
+    QMessageBox::information(this, "Shortcuts", "Game Shortcuts:\nMove tiles with arrows\nReset game with space\nOpen settings dialog with S\nQuit with Q");
 
     m_grid = new Grid(this, Pos(4,4));
 

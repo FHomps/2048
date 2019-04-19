@@ -28,6 +28,8 @@ public:
     void setPosition(Pos pos);
     Pos getPosition() const;
 
+	void makeLost();
+	
     bool recentlyFused = false;
 	
 	static QPropertyAnimation const* getLastAnimation();

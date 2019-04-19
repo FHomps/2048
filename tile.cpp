@@ -92,6 +92,10 @@ Pos Tile::getPosition() const
     return m_pos;
 }
 
+void Tile::makeLost() {
+	//TODO
+}
+
 QPropertyAnimation const* Tile::getLastAnimation() {
 	return m_lastAnimation;
 }

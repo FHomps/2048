@@ -41,13 +41,16 @@ public slots:
 	void move(Grid::Direction dir);
 	void restart();
 	
-private:	
+private:
 	QWidget* m_parent;
 	
 	Tile*** m_tiles;
 	
 	uint m_score = 0;
     QLabel* m_scoreLabel;
+	
+	bool hasLost = false;
+	bool checkForLoss() const;
 };
 
 #endif // GRID_H
